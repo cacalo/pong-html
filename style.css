@@ -1,5 +1,11 @@
+@font-face {
+  font-family: "llpixel";
+  src: url(LLPIXEL3.ttf) format("TrueType");
+}
+
 body{
   margin: 0;
+  font-family: llpixel, monospace;
 }
 
 #zonaJuego{
@@ -22,10 +28,48 @@ body{
   right: 0px;
 }
 
+#mensaje{
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 3rem;
+  color: white;
+  top: 39%;
+}
+
 .bola{
   position: absolute;
   border-radius: 50%;
   width: 30px;
   aspect-ratio: 1;
   background-color: white;
+}
+
+#tablero{
+  position: absolute;
+  font-size: 6rem;
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+
+.titilar{
+  animation-name: titilar;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes titilar{
+  0%{
+    opacity: 100%
+  }
+  49.99%{
+    opacity: 100%
+  }
+  50%{
+    opacity: 0;
+  }
+  99.99%{
+    opacity: 0;
+  }
 }
