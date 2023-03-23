@@ -6,6 +6,8 @@
 body{
   margin: 0;
   font-family: llpixel, monospace;
+  color: white;
+  text-align: center;
 }
 
 #zonaJuego{
@@ -31,9 +33,7 @@ body{
 #mensaje{
   position: absolute;
   width: 100%;
-  text-align: center;
   font-size: 3rem;
-  color: white;
   top: 39%;
 }
 
@@ -49,8 +49,6 @@ body{
   position: absolute;
   font-size: 6rem;
   width: 100%;
-  text-align: center;
-  color: white;
 }
 
 .titilar{
@@ -72,4 +70,19 @@ body{
   99.99%{
     opacity: 0;
   }
+}
+
+#mensajePuntoJson{
+  position: absolute;
+  font-size: 1rem;
+  bottom: 0%;
+  width: 100%;
+}
+
+a{
+  color: white;
+}
+
+.escondido{
+  opacity: 0;
 }

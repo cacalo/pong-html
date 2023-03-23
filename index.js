@@ -9,6 +9,7 @@ let estadoJuego = "PLAY";
 limitePuntos = 6;
 const audioPunto = new Audio("audio/punto.mp3");
 const audioHit = new Audio("audio/hit.mp3");
+const puntoJson = document.getElementById("mensajePuntoJson");
 
 class Jugador {
   x;
@@ -267,23 +268,25 @@ function comenzarJuego() {
   estadoJuego = "PLAY";
   bola = new Bola();
   tablero.element.classList.toggle("titilar", false);
+  puntoJson.classList.toggle("escondido", true);
 }
 
 function sumarPunto() {
-  tablero.sumar(2);
   bola.eliminar();
   bola = undefined;
   mensajeElement.textContent = "Presione espacio para continuar";
   audioPunto.currentTime = 0;
   audioPunto.play();
+  tablero.sumar(2);
 }
 
 function ganar(p) {
   tablero.element.classList.toggle("titilar", true);
-  mensajeElement.textContent = "¡Jugador " + p + " gana!";
   j1.toggleCPU(true);
   j2.toggleCPU(true);
   estadoJuego = "END";
+  mensajeElement.textContent = "¡Jugador " + p + " gana!";
+  puntoJson.classList.toggle("escondido", false);
 }
 
 //Ejecución
