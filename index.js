@@ -10,6 +10,7 @@ limitePuntos = 6;
 const audioPunto = new Audio("audio/punto.mp3");
 const audioHit = new Audio("audio/hit.mp3");
 const puntoJson = document.getElementById("mensajePuntoJson");
+const instrucciones = document.getElementById("instrucciones");
 
 class Jugador {
   x;
@@ -269,6 +270,7 @@ function comenzarJuego() {
   bola = new Bola();
   tablero.element.classList.toggle("titilar", false);
   puntoJson.classList.toggle("escondido", true);
+  instrucciones.classList.toggle("escondido", true);
 }
 
 function sumarPunto() {
