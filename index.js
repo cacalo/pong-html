@@ -7,6 +7,8 @@ const margenAyuda = 10;
 const mensajeElement = document.getElementById("mensaje");
 let estadoJuego = "PLAY";
 limitePuntos = 6;
+const audioPunto=new Audio("audio/punto.mp3");
+const audioHit=new Audio("audio/hit.mp3");
 
 class Jugador {
   x;
@@ -123,6 +125,7 @@ class Bola {
           this.setBolaY(j1);
           this.dx = this.dx * -1;
           this.x += this.dx;
+          audioHit.play();
         }
         //Paleta derecha
         else if (
@@ -133,9 +136,10 @@ class Bola {
           this.setBolaY(j2);
           this.dx = this.dx * -1;
           this.x += this.dx;
+          audioHit.play();
         }
 
-        //Rebote horizontal
+        //Rebote horizontal (punto)
         else if (this.x < 0 || this.x > document.body.clientWidth - anchoBola) {
           if(this.x < 100) sumarPunto(2);
           else sumarPunto(1);
@@ -276,6 +280,8 @@ function sumarPunto(){
   bola.eliminar();
   bola=undefined;
   mensajeElement.textContent = "Presione espacio para continuar";
+  audioPunto.currentTime = 0;
+  audioPunto.play();
 }
 
 //Ejecución
