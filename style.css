@@ -1,0 +1,31 @@
+body{
+  margin: 0;
+}
+
+#zonaJuego{
+  position: relative;
+  height: 100vh;
+  background-color: black;
+  overflow: hidden;
+}
+
+.jugador{
+  position: absolute;
+  background-color: white;
+}
+
+#jugador1{
+  left: 0px;
+}
+
+#jugador2{
+  right: 0px;
+}
+
+.bola{
+  position: absolute;
+  border-radius: 50%;
+  width: 30px;
+  aspect-ratio: 1;
+  background-color: white;
+}
