@@ -7,8 +7,8 @@ const margenAyuda = 10;
 const mensajeElement = document.getElementById("mensaje");
 let estadoJuego = "PLAY";
 limitePuntos = 6;
-const audioPunto=new Audio("audio/punto.mp3");
-const audioHit=new Audio("audio/hit.mp3");
+const audioPunto = new Audio("audio/punto.mp3");
+const audioHit = new Audio("audio/hit.mp3");
 
 class Jugador {
   x;
@@ -31,52 +31,58 @@ class Jugador {
 
   bajar() {
     if (!this.movimiento) {
-    this.movimiento = setInterval(() => {
-      this.y += velocidad;
-      if (this.y > document.body.clientHeight - altoPaletas) this.y =  document.body.clientHeight - altoPaletas;
-      this.element.style.top = this.y + "px";
-    }, 10);
-  }
+      this.movimiento = setInterval(() => {
+        this.y += velocidad;
+        if (this.y > document.body.clientHeight - altoPaletas)
+          this.y = document.body.clientHeight - altoPaletas;
+        this.element.style.top = this.y + "px";
+      }, 10);
+    }
   }
 
   subir() {
     if (!this.movimiento) {
       this.movimiento = setInterval(() => {
         this.y += velocidad * -1;
-        if(this.y< 0) this.y = 0;
+        if (this.y < 0) this.y = 0;
         this.element.style.top = this.y + "px";
       }, 10);
     }
   }
 
   freeze() {
-    if(this.movimiento){
-    clearInterval(this.movimiento);
-    this.movimiento = false;
+    if (this.movimiento) {
+      clearInterval(this.movimiento);
+      this.movimiento = false;
     }
   }
 
   toggleCPU(disable = false) {
-    if (!this.cpu && disable ===  false) {
+    if (!this.cpu && disable === false) {
       this.freeze();
       this.cpu = setInterval(() => {
-        try{
-
-        
-        const centroPaleta = this.y + altoPaletas  / 2;
-        console.log(Math.abs(bola.y+anchoBola/2 - centroPaleta),centroPaleta)
-        this.freeze();
-        if (Math.abs(bola.y+anchoBola/2 - centroPaleta) < anchoPaletas / 2) {console.log("NADA")}
-        else if (bola.y+anchoBola/2 < centroPaleta) {this.subir();console.log("SUBO")}
-        else {this.bajar();console.log("BAJO")}
-        }
-        catch{ 
-          this.reset()
-        };
-      }, 40)
-      
-    }
-    else{
+        if (bola) {
+          const centroPaleta = this.y + altoPaletas / 2;
+          console.log(
+            Math.abs(bola.y + anchoBola / 2 - centroPaleta),
+            centroPaleta
+          );
+          this.freeze();
+          if (
+            Math.abs(bola.y + anchoBola / 2 - centroPaleta) <
+            anchoPaletas / 2
+          ) {
+            console.log("NADA");
+          } else if (bola.y + anchoBola / 2 < centroPaleta) {
+            this.subir();
+            console.log("SUBO");
+          } else {
+            this.bajar();
+            console.log("BAJO");
+          }
+        } else this.reset();
+      }, 40);
+    } else {
       clearInterval(this.movimiento);
       this.movimiento = false;
       clearInterval(this.cpu);
@@ -84,7 +90,7 @@ class Jugador {
     }
   }
 
-  reset(){
+  reset() {
     this.freeze();
     this.y = document.body.clientHeight / 2 - this.tamaño;
     this.element.style.top = this.y + "px";
@@ -119,8 +125,8 @@ class Bola {
         //Paleta izquierda
         if (
           this.x < 0 + anchoPaletas &&
-          this.y + anchoBola/2 + margenAyuda> j1.y &&
-          this.y - anchoBola/2 - margenAyuda< j1.y + altoPaletas
+          this.y + anchoBola / 2 + margenAyuda > j1.y &&
+          this.y - anchoBola / 2 - margenAyuda < j1.y + altoPaletas
         ) {
           this.setBolaY(j1);
           this.dx = this.dx * -1;
@@ -130,8 +136,8 @@ class Bola {
         //Paleta derecha
         else if (
           this.x > document.body.clientWidth - anchoPaletas - anchoBola &&
-          this.y + anchoBola/2 + margenAyuda> j2.y &&
-          this.y - anchoBola/2 - margenAyuda < j2.y + altoPaletas
+          this.y + anchoBola / 2 + margenAyuda > j2.y &&
+          this.y - anchoBola / 2 - margenAyuda < j2.y + altoPaletas
         ) {
           this.setBolaY(j2);
           this.dx = this.dx * -1;
@@ -141,7 +147,7 @@ class Bola {
 
         //Rebote horizontal (punto)
         else if (this.x < 0 || this.x > document.body.clientWidth - anchoBola) {
-          if(this.x < 100) sumarPunto(2);
+          if (this.x < 100) sumarPunto(2);
           else sumarPunto(1);
           this.resetPosición();
         }
@@ -171,17 +177,14 @@ class Bola {
     this.element.style.top += this.y + "px";
   }
 
-  setBolaY(player){
-    const parteGolpeada = (this.y + anchoBola/2 - player.y) /
-    (altoPaletas);
-    if(parteGolpeada < 0.4){
-     this.dy -= (parteGolpeada^2) * this.efectoPuntas
-    }
-    else if (parteGolpeada < 0.6){
-     this.dy = -1*this.dy
-    }
-    else {
-     this.dy += ((parteGolpeada-0.4)^2) * this.efectoPuntas
+  setBolaY(player) {
+    const parteGolpeada = (this.y + anchoBola / 2 - player.y) / altoPaletas;
+    if (parteGolpeada < 0.4) {
+      this.dy -= (parteGolpeada ^ 2) * this.efectoPuntas;
+    } else if (parteGolpeada < 0.6) {
+      this.dy = -1 * this.dy;
+    } else {
+      this.dy += ((parteGolpeada - 0.4) ^ 2) * this.efectoPuntas;
     }
   }
 }
@@ -198,22 +201,22 @@ class Tablero {
     this.reset();
   }
 
-  reset(){
+  reset() {
     this.p1Score = 0;
     this.p2Score = 0;
     this.actualizarTexto();
   }
 
-  actualizarTexto(){
-    this.element.textContent = this.p1Score+" - "+this.p2Score;
+  actualizarTexto() {
+    this.element.textContent = this.p1Score + " - " + this.p2Score;
   }
 
-  sumar(p){
+  sumar(p) {
     if (p === 1) this.p1Score++;
     else this.p2Score++;
     this.actualizarTexto();
-    if(this.p1Score >= limitePuntos) ganar(1);
-    if(this.p2Score >= limitePuntos) ganar(2);
+    if (this.p1Score >= limitePuntos) ganar(1);
+    if (this.p2Score >= limitePuntos) ganar(2);
   }
 }
 
@@ -239,8 +242,7 @@ document.addEventListener("keydown", (e) => {
       j2.toggleCPU();
       break;
     case " ":
-      if(!bola)
-      comenzarJuego();
+      if (!bola) comenzarJuego();
       break;
   }
 });
@@ -259,29 +261,29 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-function ganar(p){
-  tablero.element.classList.toggle("titilar",true);
-  mensajeElement.textContent = "¡Jugador "+p+" gana!";
-  j1.toggleCPU(true);
-  j2.toggleCPU(true);
-  estadoJuego="END";
-}
-
-function comenzarJuego(){
+function comenzarJuego() {
   mensajeElement.textContent = "";
-  if(estadoJuego === "END") tablero.reset()
+  if (estadoJuego === "END") tablero.reset();
   estadoJuego = "PLAY";
   bola = new Bola();
-  tablero.element.classList.toggle("titilar",false);
+  tablero.element.classList.toggle("titilar", false);
 }
 
-function sumarPunto(){
-  tablero.sumar(2)
+function sumarPunto() {
+  tablero.sumar(2);
   bola.eliminar();
-  bola=undefined;
+  bola = undefined;
   mensajeElement.textContent = "Presione espacio para continuar";
   audioPunto.currentTime = 0;
   audioPunto.play();
+}
+
+function ganar(p) {
+  tablero.element.classList.toggle("titilar", true);
+  mensajeElement.textContent = "¡Jugador " + p + " gana!";
+  j1.toggleCPU(true);
+  j2.toggleCPU(true);
+  estadoJuego = "END";
 }
 
 //Ejecución
