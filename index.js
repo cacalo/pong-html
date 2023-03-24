@@ -1,12 +1,8 @@
 const zonaJuego = document.getElementById("zonaJuego");
-let velocidad = 10;
-let anchoPaletas = 20;
-let altoPaletas = 200;
-let anchoBola = 50;
+let bola;
 const margenAyuda = 10;
 const mensajeElement = document.getElementById("mensaje");
 let estadoJuego = "PLAY";
-limitePuntos = 6;
 const audioPunto = new Audio("audio/punto.mp3");
 const audioHit = new Audio("audio/hit.mp3");
 const puntoJson = document.getElementById("mensajePuntoJson");
@@ -14,29 +10,30 @@ const instrucciones = document.getElementById("instrucciones");
 
 class Jugador {
   x;
-  tamaño = 100;
   y;
+  alto= 200;
+  ancho= 20;
   element;
   cpu;
   movimiento;
+  velocidad = 10;
 
-  constructor(id, cpu = false) {
+  constructor(id) {
     this.element = document.createElement("div");
     this.element.classList = "jugador";
     this.element.id = id;
-    this.element.style.height = altoPaletas + "px";
-    this.element.style.width = anchoPaletas + "px";
+    this.element.style.height = this.alto + "px";
+    this.element.style.width = this.ancho + "px";
     zonaJuego.appendChild(this.element);
     this.reset();
-    this.cpu = cpu;
   }
 
   bajar() {
     if (!this.movimiento) {
       this.movimiento = setInterval(() => {
-        this.y += velocidad;
-        if (this.y > document.body.clientHeight - altoPaletas)
-          this.y = document.body.clientHeight - altoPaletas;
+        this.y += this.velocidad;
+        if (this.y > document.body.clientHeight - this.alto)
+          this.y = document.body.clientHeight - this.alto;
         this.element.style.top = this.y + "px";
       }, 10);
     }
@@ -45,7 +42,7 @@ class Jugador {
   subir() {
     if (!this.movimiento) {
       this.movimiento = setInterval(() => {
-        this.y += velocidad * -1;
+        this.y += this.velocidad * -1;
         if (this.y < 0) this.y = 0;
         this.element.style.top = this.y + "px";
       }, 10);
@@ -64,18 +61,18 @@ class Jugador {
       this.freeze();
       this.cpu = setInterval(() => {
         if (bola) {
-          const centroPaleta = this.y + altoPaletas / 2;
+          const centroPaleta = this.y + this.alto / 2;
           console.log(
-            Math.abs(bola.y + anchoBola / 2 - centroPaleta),
+            Math.abs(bola.y + this.ancho / 2 - centroPaleta),
             centroPaleta
           );
           this.freeze();
           if (
-            Math.abs(bola.y + anchoBola / 2 - centroPaleta) <
-            anchoPaletas / 2
+            Math.abs(bola.y + this.ancho / 2 - centroPaleta) <
+            this.ancho / 2
           ) {
             console.log("NADA");
-          } else if (bola.y + anchoBola / 2 < centroPaleta) {
+          } else if (bola.y + this.ancho / 2 < centroPaleta) {
             this.subir();
             console.log("SUBO");
           } else {
@@ -94,7 +91,7 @@ class Jugador {
 
   reset() {
     this.freeze();
-    this.y = document.body.clientHeight / 2 - this.tamaño;
+    this.y = document.body.clientHeight / 2 - this.alto/2;
     this.element.style.top = this.y + "px";
   }
 }
@@ -102,7 +99,7 @@ class Jugador {
 class Bola {
   x;
   y;
-
+  ancho= 50;
   dx = -15;
   dy = 0;
   element;
@@ -113,7 +110,7 @@ class Bola {
     this.element = document.createElement("div");
     this.element.classList = "bola";
     zonaJuego.appendChild(this.element);
-    this.element.style.width = anchoBola + "px";
+    this.element.style.width = this.ancho + "px";
     this.resetPosición();
     this.mover();
   }
@@ -126,9 +123,9 @@ class Bola {
         //Paletas
         //Paleta izquierda
         if (
-          this.x < 0 + anchoPaletas &&
-          this.y + anchoBola / 2 + margenAyuda > j1.y &&
-          this.y - anchoBola / 2 - margenAyuda < j1.y + altoPaletas
+          this.x < 0 + j1.ancho &&
+          this.y + this.ancho / 2 + margenAyuda > j1.y &&
+          this.y - this.ancho / 2 - margenAyuda < j1.y + j1.alto
         ) {
           this.setBolaY(j1);
           this.dx = this.dx * -1;
@@ -137,9 +134,9 @@ class Bola {
         }
         //Paleta derecha
         else if (
-          this.x > document.body.clientWidth - anchoPaletas - anchoBola &&
-          this.y + anchoBola / 2 + margenAyuda > j2.y &&
-          this.y - anchoBola / 2 - margenAyuda < j2.y + altoPaletas
+          this.x > document.body.clientWidth - j2.ancho - this.ancho &&
+          this.y + this.ancho / 2 + margenAyuda > j2.y &&
+          this.y - this.ancho / 2 - margenAyuda < j2.y + j1.alto
         ) {
           this.setBolaY(j2);
           this.dx = this.dx * -1;
@@ -148,14 +145,14 @@ class Bola {
         }
 
         //Rebote horizontal (punto)
-        else if (this.x < 0 || this.x > document.body.clientWidth - anchoBola) {
+        else if (this.x < 0 || this.x > document.body.clientWidth - this.ancho) {
           if (this.x < 100) sumarPunto(2);
           else sumarPunto(1);
           this.resetPosición();
         }
 
         //Rebote vertical
-        if (this.y < 0 || this.y > document.body.clientHeight - anchoBola) {
+        if (this.y < 0 || this.y > document.body.clientHeight - this.ancho) {
           this.dy = this.dy * -1;
           this.y += this.dy;
         }
@@ -173,14 +170,14 @@ class Bola {
   }
 
   resetPosición() {
-    this.x = document.body.clientWidth / 2 - anchoBola / 2;
-    this.y = document.body.clientHeight / 2 - anchoBola / 2;
+    this.x = document.body.clientWidth / 2 - this.ancho / 2;
+    this.y = document.body.clientHeight / 2 - this.ancho / 2;
     this.element.style.left += this.x + "px";
     this.element.style.top += this.y + "px";
   }
 
   setBolaY(player) {
-    const parteGolpeada = (this.y + anchoBola / 2 - player.y) / altoPaletas;
+    const parteGolpeada = (this.y + this.ancho / 2 - player.y) / j1.alto;
     if (parteGolpeada < 0.4) {
       this.dy -= (parteGolpeada ^ 2) * this.efectoPuntas;
     } else if (parteGolpeada < 0.6) {
@@ -195,6 +192,7 @@ class Tablero {
   element;
   p1Score = 0;
   p1Score = 2;
+  limitePuntos = 6;
 
   constructor() {
     this.element = document.createElement("p");
@@ -217,8 +215,8 @@ class Tablero {
     if (p === 1) this.p1Score++;
     else this.p2Score++;
     this.actualizarTexto();
-    if (this.p1Score >= limitePuntos) ganar(1);
-    if (this.p2Score >= limitePuntos) ganar(2);
+    if (this.p1Score >= this.limitePuntos) ganar(1);
+    if (this.p2Score >= this.limitePuntos) ganar(2);
   }
 }
 
@@ -295,4 +293,3 @@ function ganar(p) {
 const tablero = new Tablero();
 const j1 = new Jugador("jugador1");
 const j2 = new Jugador("jugador2");
-let bola;
