@@ -1,94 +1,85 @@
-@font-face {
-  font-family: "llpixel";
-  src: url(LLPIXEL3.ttf) format("TrueType");
-}
-
 body{
   margin: 0;
-  font-family: llpixel, monospace;
   color: white;
+  font-family: llpixel, monospace;
   text-align: center;
 }
 
 #zonaJuego{
   position: relative;
-  height: 100vh;
   background-color: black;
+  height: 100vh;
   overflow: hidden;
 }
 
-.jugador{
+.paleta{
   position: absolute;
+  width: 20px;
+  height: 200px;
   background-color: white;
 }
 
-#jugador1{
-  left: 0px;
+.bola{
+  background-color: white;
+  width: 30px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: absolute;
 }
 
-#jugador2{
-  right: 0px;
+#tablero{
+  text-align: center;
+  font-size: 5rem;
+}
+
+#paletasContainer :first-child{
+  left: 0;
+}
+
+#paletasContainer :last-child{
+  right: 0;
 }
 
 #mensaje{
   position: absolute;
+  top: 45%;
   width: 100%;
   font-size: 3rem;
-  top: 39%;
 }
 
-.bola{
+#instrucciones{
   position: absolute;
-  border-radius: 50%;
-  width: 30px;
-  aspect-ratio: 1;
-  background-color: white;
-}
-
-#tablero{
-  position: absolute;
-  font-size: 6rem;
   width: 100%;
-}
-
-.titilar{
-  animation-name: titilar;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-}
-
-@keyframes titilar{
-  0%{
-    opacity: 100%
-  }
-  49.99%{
-    opacity: 100%
-  }
-  50%{
-    opacity: 0;
-  }
-  99.99%{
-    opacity: 0;
-  }
-}
-
-#mensajePuntoJson, #instrucciones{
-  position: absolute;
-  font-size: 1rem;
-  bottom: 0%;
-  width: 100%;
+  bottom:0;
+  font-size: 1.2rem;
 }
 
 kbd{
+  background-color: rgba(255, 255, 255, 0.312);
   display: inline-block;
-  background-color: rgba(255, 255, 255, 0.119);
   width: 20px;
-}
-
-a{
-  color: white;
+  aspect-ratio: 1;
 }
 
 .escondido{
   opacity: 0;
+}
+
+@font-face {
+  font-family: "llpixel";
+  src: url(./LLPIXEL3.ttf);
+}
+
+.titilar{
+  animation-name: titilar;
+  animation-duration: 0.8s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes titilar {
+  0%{ opacity: 100%}
+  49.99%{ opacity: 100%}
+  50%{ opacity: 0%}
+  99.99%{ opacity: 0%}
+  
 }
