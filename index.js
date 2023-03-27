@@ -62,22 +62,15 @@ class Jugador {
       this.cpu = setInterval(() => {
         if (bola) {
           const centroPaleta = this.y + this.alto / 2;
-          console.log(
-            Math.abs(bola.y + this.ancho / 2 - centroPaleta),
-            centroPaleta
-          );
           this.freeze();
           if (
             Math.abs(bola.y + this.ancho / 2 - centroPaleta) <
             this.ancho / 2
           ) {
-            console.log("NADA");
           } else if (bola.y + this.ancho / 2 < centroPaleta) {
             this.subir();
-            console.log("SUBO");
           } else {
             this.bajar();
-            console.log("BAJO");
           }
         } else this.reset();
       }, 40);
@@ -94,6 +87,11 @@ class Jugador {
     this.y = document.body.clientHeight / 2 - this.alto/2;
     this.element.style.top = this.y + "px";
   }
+
+  getCentro(){
+    return this.y + this.alto/2;
+  }
+
 }
 
 class Bola {
@@ -104,7 +102,6 @@ class Bola {
   dy = 0;
   element;
   movimiento;
-  efectoPuntas = 5;
 
   constructor() {
     this.element = document.createElement("div");
@@ -124,10 +121,10 @@ class Bola {
         //Paleta izquierda
         if (
           this.x < 0 + j1.ancho &&
-          this.y + this.ancho / 2 + margenAyuda > j1.y &&
+          this.getCentro() + margenAyuda > j1.y &&
           this.y - this.ancho / 2 - margenAyuda < j1.y + j1.alto
         ) {
-          this.setBolaY(j1);
+          this.dy += this.obtenerVariacionY(j1)
           this.dx = this.dx * -1;
           this.x += this.dx;
           audioHit.play();
@@ -135,10 +132,10 @@ class Bola {
         //Paleta derecha
         else if (
           this.x > document.body.clientWidth - j2.ancho - this.ancho &&
-          this.y + this.ancho / 2 + margenAyuda > j2.y &&
+          this.getCentro() + margenAyuda > j2.y &&
           this.y - this.ancho / 2 - margenAyuda < j2.y + j1.alto
         ) {
-          this.setBolaY(j2);
+          this.dy += this.obtenerVariacionY(j2)
           this.dx = this.dx * -1;
           this.x += this.dx;
           audioHit.play();
@@ -176,15 +173,14 @@ class Bola {
     this.element.style.top += this.y + "px";
   }
 
-  setBolaY(player) {
-    const parteGolpeada = (this.y + this.ancho / 2 - player.y) / j1.alto;
-    if (parteGolpeada < 0.4) {
-      this.dy -= (parteGolpeada ^ 2) * this.efectoPuntas;
-    } else if (parteGolpeada < 0.6) {
-      this.dy = -1 * this.dy;
-    } else {
-      this.dy += ((parteGolpeada - 0.4) ^ 2) * this.efectoPuntas;
-    }
+  obtenerVariacionY(j){
+    const diferencia = this.getCentro() - j.getCentro();
+    return diferencia / 10;
+  }
+
+  /** Obtiene el centro Y de la paleta */
+  getCentro(){
+    return this.y + this.ancho/2;
   }
 }
 
